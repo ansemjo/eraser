@@ -29,7 +29,7 @@ func main() {
 		fatal("")
 	}
 
-	// open filename in first argument
+	// open filename
 	if *filename == "" {
 		fmt.Fprintln(os.Stderr, "eraser: target filename required")
 		flag.Usage()
@@ -46,9 +46,7 @@ func main() {
 	if err != nil {
 		fatal(err.Error())
 	}
-
 	size := stat.Size()
-	fmt.Printf("%s is %d bytes\n", file.Name(), size)
 
 	var reader io.Reader
 	if *flagZero {
@@ -57,10 +55,18 @@ func main() {
 		reader = devAES()
 	}
 
-	_, err = io.CopyN(file, reader, size)
-	if err != nil {
-		fatal(err.Error())
+	spinner := newProgressSpinner(size)
+	spinner.draw()
+	for spinner.current < size {
+		chunk := size % (256*1024 + 1)
+		chunk, err = io.CopyN(file, reader, chunk)
+		if err != nil {
+			fatal(err.Error())
+		}
+		spinner.add(chunk)
 	}
+	spinner.done()
+
 	file.Sync()
 
 }
