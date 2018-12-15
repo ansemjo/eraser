@@ -23,9 +23,13 @@ func min(a, b int64) int64 {
 
 func main() {
 
-	filename := flag.String("f", "", "target filename")
 	flagZero := flag.Bool("zero", false, "use zeroes")
 	flagRand := flag.Bool("rand", true, "use random noise")
+
+	flag.Usage = func() {
+		fmt.Println("Usage: $ eraser [options] filename")
+		flag.PrintDefaults()
+	}
 
 	flag.Parse()
 
@@ -36,14 +40,20 @@ func main() {
 		fatal("")
 	}
 
+	// warn on unused flags
+	if len(flag.Args()) > 1 {
+		fmt.Printf("Warning: unused arguments: %s\n", flag.Args()[1:])
+	}
+
 	// open filename
-	if *filename == "" {
+	filename := flag.Arg(0)
+	if filename == "" {
 		fmt.Fprintln(os.Stderr, "eraser: target filename required")
 		flag.Usage()
 		fatal("")
 	}
 
-	file, err := os.OpenFile(*filename, os.O_WRONLY, 0)
+	file, err := os.OpenFile(filename, os.O_WRONLY, 0)
 	if err != nil {
 		fatal(err.Error())
 	}
