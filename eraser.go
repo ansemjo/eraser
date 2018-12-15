@@ -48,7 +48,7 @@ func main() {
 
 	// warn on unused flags
 	if len(flag.Args()) > 1 {
-		fmt.Fprintf(os.Stderr, "warn: unused arguments: %s\n", flag.Args()[1:])
+		check(fmt.Errorf("err: unused arguments: %s", flag.Args()[1:]))
 	}
 
 	// get filename
