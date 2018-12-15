@@ -1,0 +1,6 @@
+eraser
+package/
+release/
+*.rpm
+*.deb
+*.apk

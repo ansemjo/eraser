@@ -1,3 +1,6 @@
+// Copyright (c) 2018 Anton Semjonov
+// Licensed under the MIT License
+
 package main
 
 // zero is a simple struct that only returns zeroes

@@ -1,3 +1,6 @@
+// Copyright (c) 2018 Anton Semjonov
+// Licensed under the MIT License
+
 package main
 
 import (
@@ -7,37 +10,51 @@ import (
 	"os"
 )
 
+var version = "unknown"
+
 func main() {
 
 	// data source flags
 	flagZero := flag.Bool("zero", false, "use zeroes")
 	flagRand := flag.Bool("rand", true, "use random noise")
 
+	// print version
+	flagVersion := flag.Bool("version", false, "print version and exit")
+	printVersion := func() {
+		fmt.Printf("eraser version %s\n", version)
+	}
+
 	// custom usage message
 	flag.Usage = func() {
-		fmt.Println("Usage: $ eraser [options] filename")
+		fmt.Printf("Usage: $ %s [options] filename\n", os.Args[0])
 		flag.PrintDefaults()
 	}
 
 	// parse argv
 	flag.Parse()
 
+	// only print version
+	if *flagVersion {
+		printVersion()
+		os.Exit(0)
+	}
+
 	// zero and rand cannot both be false
 	if !*flagRand && !*flagZero {
-		fmt.Fprintln(os.Stderr, "eraser: one of -rand or -zero required")
+		fmt.Fprintln(os.Stderr, "err: one of -rand or -zero required")
 		flag.Usage()
 		os.Exit(1)
 	}
 
 	// warn on unused flags
 	if len(flag.Args()) > 1 {
-		fmt.Fprintf(os.Stderr, "Warning: unused arguments: %s\n", flag.Args()[1:])
+		fmt.Fprintf(os.Stderr, "warn: unused arguments: %s\n", flag.Args()[1:])
 	}
 
 	// get filename
 	filename := flag.Arg(0)
 	if filename == "" {
-		fmt.Fprintln(os.Stderr, "eraser: target filename required")
+		fmt.Fprintln(os.Stderr, "err: target filename required")
 		flag.Usage()
 		os.Exit(1)
 	}
