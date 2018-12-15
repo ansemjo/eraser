@@ -14,6 +14,13 @@ func fatal(err string) {
 	os.Exit(1)
 }
 
+func min(a, b int64) int64 {
+	if a < b {
+		return a
+	}
+	return b
+}
+
 func main() {
 
 	filename := flag.String("f", "", "target filename")
@@ -58,7 +65,7 @@ func main() {
 	spinner := newProgressSpinner(size)
 	spinner.draw()
 	for spinner.current < size {
-		chunk := size % (256*1024 + 1)
+		chunk := min(size-spinner.current, 256*1024)
 		chunk, err = io.CopyN(file, reader, chunk)
 		if err != nil {
 			fatal(err.Error())
