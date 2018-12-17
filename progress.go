@@ -46,8 +46,12 @@ func newProgress(total int64) *Progress {
 }
 
 func (prg *Progress) draw() {
-	fmt.Printf(prg.fmt+" (%v, %.2f MiB/s)", prg.spin.next(),
-		prg.current, prg.total, time.Since(prg.start).Round(time.Second), prg.avg.current/(1024*1024))
+	fmt.Printf(prg.fmt+" (%v elapsed, %.2f MiB/s, ETA %v)", prg.spin.next(),
+		prg.current, prg.total,
+		time.Since(prg.start).Round(time.Second),
+		prg.avg.current/(1024*1024),
+		time.Duration(float32(prg.total-prg.current)/prg.avg.current)*time.Second,
+	)
 	prg.last = time.Now()
 }
 
