@@ -62,12 +62,12 @@ func main() {
 	// open file for writing
 	file, err := os.OpenFile(filename, os.O_WRONLY, 0)
 	check(err)
-	defer file.Close()
 
-	// get size
-	stat, err := file.Stat()
+	// get size by seeking
+	size, err := file.Seek(0, os.SEEK_END)
 	check(err)
-	size := stat.Size()
+	_, err = file.Seek(0, 0)
+	check(err)
 
 	// initialize desired reader
 	var reader io.Reader
@@ -90,6 +90,10 @@ func main() {
 
 	// flush to disk
 	file.Sync()
+
+	// close the descriptor
+	err = file.Close()
+	check(err)
 
 }
 
