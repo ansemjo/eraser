@@ -47,7 +47,7 @@ func newProgress(total int64) *Progress {
 
 func (prg *Progress) draw() {
 	fmt.Printf(prg.fmt+" (%v, %.2f MiB/s)", prg.spin.next(),
-		prg.current, prg.total, time.Since(prg.start).Round(time.Millisecond), prg.avg.current/(1024*1024))
+		prg.current, prg.total, time.Since(prg.start).Round(time.Second), prg.avg.current/(1024*1024))
 	prg.last = time.Now()
 }
 
@@ -76,5 +76,5 @@ func (avg *Average) sample(added int64) {
 	delta := time.Since(avg.last)
 	avg.last = time.Now()
 	average := float32(added) / float32(delta.Seconds())
-	avg.current = avg.current + (average-avg.current)/200
+	avg.current = avg.current + (average-avg.current)/500
 }
