@@ -39,7 +39,7 @@ func newProgress(total int64) *Progress {
 		avg:     newAverage(),
 		total:   total,
 		current: 0,
-		fmt:     fmt.Sprintf("\r %%c %%%dd / %%d", len(fmt.Sprint(total))),
+		fmt:     fmt.Sprintf("\033[2K\r %%c %%%dd / %%d", len(fmt.Sprint(total))),
 		start:   time.Now(),
 		last:    time.Now(),
 	}
