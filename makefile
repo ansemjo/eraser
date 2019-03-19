@@ -33,9 +33,9 @@ PREFIX 	:= /usr
 
 # install binary
 .PHONY: install
-install : $(DESTDIR)$(PREFIX)/$(NAME)
+install : $(DESTDIR)$(PREFIX)/bin/$(NAME)
 
-$(DESTDIR)$(PREFIX)/$(NAME) : $(NAME)
+$(DESTDIR)$(PREFIX)/bin/$(NAME) : $(NAME)
 	install -m 755 -D $< $@
 
 # ---------- packaging ----------
