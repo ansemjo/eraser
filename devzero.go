@@ -3,13 +3,17 @@
 
 package main
 
+import (
+	"io"
+)
+
 // zero is a simple struct that only returns zeroes
 // keeping a buffer to avoid permanent reallocation
 type zero struct {
 	buf []byte
 }
 
-func devZero() (z *zero) {
+func devZero() (r io.Reader) {
 	return &zero{}
 }
 
