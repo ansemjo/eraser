@@ -19,29 +19,23 @@ func main() {
 	flagZero := flag.Bool("zero", false, "use zeroes")
 	flagRand := flag.Bool("rand", false, "use pseudorandom noise")
 
+	// add erasure note flag
+	flagNote := flag.Bool("note", false, "add timestamped erasure note")
+
 	// print version
-	flagVersion := flag.Bool("version", false, "print version and exit")
 	printVersion := func() {
 		fmt.Printf("eraser version %s\n", version)
 	}
 
-	// add erasure note flag
-	flagNote := flag.Bool("note", false, "add timestamped erasure note")
-
 	// custom usage message
 	flag.Usage = func() {
-		fmt.Printf("Usage: $ %s [options] filename\n", os.Args[0])
+		printVersion()
+		fmt.Fprintf(os.Stderr, "Usage: $ %s [options] filename\n", os.Args[0])
 		flag.PrintDefaults()
 	}
 
 	// parse argv
 	flag.Parse()
-
-	// only print version
-	if *flagVersion {
-		printVersion()
-		os.Exit(0)
-	}
 
 	// zero and rand cannot both be false
 	if !*flagRand && !*flagZero {
