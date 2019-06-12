@@ -36,23 +36,29 @@ func main() {
 
 	// parse argv
 	flag.Parse()
+	cmderr := false
 
 	// zero and rand cannot both be false
 	if !*flagRand && !*flagZero {
 		fmt.Fprintln(os.Stderr, "err: one of -rand or -zero required")
-		flag.Usage()
-		os.Exit(1)
+		cmderr = true
 	}
 
 	// warn on unused flags
 	if len(flag.Args()) > 1 {
-		check(fmt.Errorf("err: unused arguments: %s", flag.Args()[1:]))
+		fmt.Fprintf(os.Stderr, "err: unused arguments: %s\n", flag.Args()[1:])
+		cmderr = true
 	}
 
 	// get filename
 	filename := flag.Arg(0)
 	if filename == "" {
 		fmt.Fprintln(os.Stderr, "err: target filename required")
+		cmderr = true
+	}
+
+	// error parsing command line
+	if cmderr {
 		flag.Usage()
 		os.Exit(1)
 	}
