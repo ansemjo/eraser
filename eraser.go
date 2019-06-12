@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"time"
 )
 
 var version = "unknown"
@@ -23,6 +24,9 @@ func main() {
 	printVersion := func() {
 		fmt.Printf("eraser version %s\n", version)
 	}
+
+	// add erasure note flag
+	flagNote := flag.Bool("note", false, "add timestamped erasure note")
 
 	// custom usage message
 	flag.Usage = func() {
@@ -86,6 +90,14 @@ func main() {
 		check(err)
 		meter.add(chunk)
 	}
+
+	// optionally add erasure note
+	if *flagNote {
+		_, err = file.WriteAt([]byte(fmt.Sprintf("ERASURE ON %s\n", time.Now().UTC().Format(time.RFC3339))), 0)
+		check(err)
+	}
+
+	// finish progress meter
 	meter.done()
 
 	// flush to disk
