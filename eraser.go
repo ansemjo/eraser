@@ -17,7 +17,7 @@ func main() {
 
 	// data source flags
 	flagZero := flag.Bool("zero", false, "use zeroes")
-	flagRand := flag.Bool("rand", true, "use random noise")
+	flagRand := flag.Bool("rand", false, "use pseudorandom noise")
 
 	// print version
 	flagVersion := flag.Bool("version", false, "print version and exit")
