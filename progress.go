@@ -47,10 +47,10 @@ func newProgress(total int64) *Progress {
 
 func (prg *Progress) draw() {
 	fmt.Printf(prg.fmt+" (%.1f%%, %v elapsed, %.2f MiB/s, ETA %v)",
-		prg.spin.next(), prg.current, prg.total, // spinner rune, bytes progress
-		float64(prg.current)/float64(prg.total) * 100, // progress percentage
-		time.Since(prg.start).Round(time.Second), // elapsed time
-		prg.avg.current/(1024*1024), // current speed
+		prg.spin.next(), prg.current, prg.total,                                   // spinner rune, bytes progress
+		float64(prg.current)/float64(prg.total)*100,                               // progress percentage
+		time.Since(prg.start).Round(time.Second),                                  // elapsed time
+		prg.avg.current/(1024*1024),                                               // current speed
 		time.Duration(float32(prg.total-prg.current)/prg.avg.current)*time.Second, // estimated time left
 	)
 	prg.last = time.Now()
