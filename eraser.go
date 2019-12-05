@@ -16,11 +16,11 @@ var version = "unknown"
 func main() {
 
 	// data source flags
-	flagZero := flag.Bool("zero", false, "use zeroes")
-	flagRand := flag.Bool("rand", false, "use pseudorandom noise")
+	flagZero := flag.Bool("zero", false, "overwrite with zeroes")
+	flagRand := flag.Bool("rand", false, "overwrite with pseudorandom noise")
 
 	// add erasure note flag
-	flagNote := flag.Bool("note", false, "add timestamped erasure note")
+	flagNote := flag.Bool("note", false, "add timestamped erasure note in first 32 bytes")
 
 	// print version
 	printVersion := func() {
@@ -30,7 +30,7 @@ func main() {
 	// custom usage message
 	flag.Usage = func() {
 		printVersion()
-		fmt.Fprintf(os.Stderr, "Usage: $ %s [options] filename\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "usage: $ %s [options] filename\n", os.Args[0])
 		flag.PrintDefaults()
 	}
 
