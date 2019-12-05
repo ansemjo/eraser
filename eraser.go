@@ -97,11 +97,12 @@ func main() {
 		check(err)
 	}
 
+	// flush to disk
+	meter.syncing()
+	file.Sync()
+
 	// finish progress meter
 	meter.done()
-
-	// flush to disk
-	file.Sync()
 
 	// close the descriptor
 	err = file.Close()

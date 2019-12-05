@@ -56,8 +56,12 @@ func (prg *Progress) draw() {
 	prg.last = time.Now()
 }
 
+func (prg *Progress) syncing() {
+	fmt.Printf("\033[2K\r %c %d bytes written, syncing to disk ...", '⦁', prg.total)
+}
+
 func (prg *Progress) done() {
-	fmt.Printf("\033[2K\r %c %d bytes written\n", '✔', prg.total)
+	fmt.Printf("\033[2K\r %c %d bytes written in %v\n", '✔', prg.total, time.Since(prg.start).Round(time.Second))
 }
 
 func (prg *Progress) add(bytes int64) {
