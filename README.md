@@ -14,6 +14,8 @@ SSDs! Use ATA Secure Erase in that case, which deletes the MEK on self-encryptin
 drives and renders all data useless instantly. Some harddisks also have instant
 secure erase (ISE) – you should prefer that.
 
+[idea]: https://wiki.archlinux.org/index.php/Securely_wipe_disk#Random_data
+
 # INSTALLATION
 
     go get github.com/ansemjo/eraser
