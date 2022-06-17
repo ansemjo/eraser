@@ -22,7 +22,7 @@ secure erase (ISE) – you should prefer that.
 
 # USAGE
 
-    eraser { -rand | -zero } [-note] blockdev
+    eraser { -rand | -zero } [-direct] [-note] blockdev
 
 Use `-rand` for the encrypted zerostream described above or `-zero` to just
 use zeroes instead.
@@ -31,8 +31,9 @@ The `-note` flag writes a little note with a timestamp to the first 32 bytes
 of `blockdev` after successful deletion. You can then `head -1 blockdev` and
 see when the disk was deleted later.
 
-The progress spinner probably needs some work. I found it to be pretty
-inaccurate. It looks nice tho'.
+With `-direct` the disk is opened with `O_DIRECT`, which bypasses most caches and gives a more realistic speed.
+
+The progress spinner calculates the estimated remaining time based on the average speed of the bytes *written so far*, as I've found that the current average speed is a very bad measure for accurate estimations.
 
 # DISCLAIMER
 
