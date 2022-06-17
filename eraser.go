@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"syscall"
 	"time"
 )
 
@@ -21,6 +22,9 @@ func main() {
 
 	// add erasure note flag
 	flagNote := flag.Bool("note", false, "add timestamped erasure note in first 32 bytes")
+
+	// use O_DIRECT when writing
+	flagDirect := flag.Bool("direct", false, "use O_DIRECT flag to open the file")
 
 	// print version
 	printVersion := func() {
@@ -64,7 +68,11 @@ func main() {
 	}
 
 	// open file for writing
-	file, err := os.OpenFile(filename, os.O_WRONLY, 0)
+	flags := os.O_WRONLY
+	if *flagDirect {
+		flags |= syscall.O_DIRECT
+	}
+	file, err := os.OpenFile(filename, flags, 0)
 	check(err)
 
 	// get size by seeking
