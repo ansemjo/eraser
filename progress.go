@@ -24,13 +24,20 @@ func (s *Spinner) next() rune {
 }
 
 type Progress struct {
-	spin    *Spinner
-	avg     *Average
-	total   int64
+	// spinner to print an updating rune
+	spin *Spinner
+	// avg is used to calculate average speed
+	avg *Average
+	// total size of disk
+	total int64
+	// current amount of written bytes
 	current int64
-	fmt     string
-	start   time.Time
-	last    time.Time
+	// format string for printing
+	fmt string
+	// start time of operation
+	start time.Time
+	// last drawing time
+	last time.Time
 }
 
 func newProgress(total int64) *Progress {
@@ -45,13 +52,22 @@ func newProgress(total int64) *Progress {
 	}
 }
 
+func (prg *Progress) estimate() time.Duration {
+	if int64(time.Since(prg.start)) == 0 || prg.current == 0 {
+		return time.Duration(0)
+	}
+	speed := float64(prg.current) / time.Since(prg.start).Seconds()
+	return time.Duration(float64(prg.total-prg.current) / speed)
+}
+
 func (prg *Progress) draw() {
+
 	fmt.Printf(prg.fmt+" (%.1f%%, %v elapsed, %.2f MiB/s, ETA %v)",
-		prg.spin.next(), prg.current, prg.total,                                   // spinner rune, bytes progress
-		float64(prg.current)/float64(prg.total)*100,                               // progress percentage
-		time.Since(prg.start).Round(time.Second),                                  // elapsed time
-		prg.avg.current/(1024*1024),                                               // current speed
-		time.Duration(float32(prg.total-prg.current)/prg.avg.current)*time.Second, // estimated time left
+		prg.spin.next(), prg.current, prg.total, // spinner rune, bytes progress
+		float64(prg.current)/float64(prg.total)*100, // progress percentage
+		time.Since(prg.start).Round(time.Second),    // elapsed time
+		prg.avg.current/(1024*1024),                 // current speed
+		prg.estimate()*time.Second,                  // estimated time left
 	)
 	prg.last = time.Now()
 }
